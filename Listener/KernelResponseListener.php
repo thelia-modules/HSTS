@@ -4,7 +4,7 @@ namespace HSTS\Listener;
 
 use HSTS\HSTS;
 use Propel\Runtime\ActiveQuery\Criteria;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Thelia\Model\ConfigQuery;
@@ -14,9 +14,9 @@ use Thelia\Model\ConfigQuery;
  */
 class KernelResponseListener implements EventSubscriberInterface
 {
-    public function response(FilterResponseEvent $event)
+    public function response(ResponseEvent $event)
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             return;
         }
 
@@ -29,6 +29,7 @@ class KernelResponseListener implements EventSubscriberInterface
             HSTS::CONFIG_KET_HSSTS_MAX_AGE
         ], Criteria::IN)
             ->find();
+
 
         if ($configs->count() !== 4) {
             return;
@@ -77,7 +78,7 @@ class KernelResponseListener implements EventSubscriberInterface
         ]);
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::RESPONSE => [

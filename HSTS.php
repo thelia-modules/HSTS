@@ -3,6 +3,7 @@
 namespace HSTS;
 
 use Propel\Runtime\Connection\ConnectionInterface;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator;
 use Thelia\Model\Config as ConfigModel;
 use Thelia\Model\ConfigQuery;
 use Thelia\Module\BaseModule;
@@ -20,7 +21,15 @@ class HSTS extends BaseModule
     /** @var string */
     const DOMAIN_NAME = 'hsts';
 
-    public function postActivation(ConnectionInterface $con = null)
+    public static function configureServices(ServicesConfigurator $servicesConfigurator): void
+    {
+        $servicesConfigurator->load(self::getModuleCode().'\\', __DIR__)
+            ->exclude([THELIA_MODULE_DIR.ucfirst(self::getModuleCode()).'/I18n/*'])
+            ->autowire(true)
+            ->autoconfigure(true);
+    }
+
+    public function postActivation(ConnectionInterface $con = null):void
     {
         if (null === ConfigQuery::create()->filterByName(self::CONFIG_KET_HSSTS_ENABLE)->findOne()) {
             (new ConfigModel())
