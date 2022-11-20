@@ -12,15 +12,20 @@ use Thelia\Module\BaseModule;
  */
 class HSTS extends BaseModule
 {
-    const CONFIG_KET_HSSTS_ENABLE = 'hsts_enable';
-    const CONFIG_KET_HSSTS_MAX_AGE = 'hsts_max_age';
-    const CONFIG_KET_HSSTS_INCLUDE_SUB_DOMAINS = 'hsts_include_sub_domains';
-    const CONFIG_KET_HSSTS_PRELOAD = 'hsts_preload';
+    public const CONFIG_KET_HSSTS_ENABLE = 'hsts_enable';
+    public const CONFIG_KET_HSSTS_MAX_AGE = 'hsts_max_age';
+    public const CONFIG_KET_HSSTS_INCLUDE_SUB_DOMAINS = 'hsts_include_sub_domains';
+    public const CONFIG_KET_HSSTS_PRELOAD = 'hsts_preload';
 
     /** @var string */
-    const DOMAIN_NAME = 'hsts';
+    public const DOMAIN_NAME = 'hsts';
 
-    public function postActivation(ConnectionInterface $con = null)
+    /**
+     * @param ConnectionInterface|null $con
+     * @return void
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function postActivation(?ConnectionInterface $con = null): void
     {
         if (null === ConfigQuery::create()->filterByName(self::CONFIG_KET_HSSTS_ENABLE)->findOne()) {
             (new ConfigModel())

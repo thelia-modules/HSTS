@@ -4,9 +4,9 @@ namespace HSTS\Listener;
 
 use HSTS\HSTS;
 use Propel\Runtime\ActiveQuery\Criteria;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Thelia\Model\ConfigQuery;
 
 /**
@@ -14,12 +14,8 @@ use Thelia\Model\ConfigQuery;
  */
 class KernelResponseListener implements EventSubscriberInterface
 {
-    public function response(FilterResponseEvent $event)
+    public function response(ResponseEvent $event)
     {
-        if (!$event->isMasterRequest()) {
-            return;
-        }
-
         $response = $event->getResponse();
 
         $configs = ConfigQuery::create()->filterByName([
