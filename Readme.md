@@ -14,7 +14,7 @@ More information : https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security
 Add it in your main thelia composer.json file
 
 ```
-composer require thelia/hsts-module:~0.1.0
+composer require thelia/hsts-module:~0.2
 ```
 
 ## Usage
